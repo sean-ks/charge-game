@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+    <title>Reload</title>
+    <link rel="stylesheet" href= "./startstyle.css">
+</head>
+<body>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const socket = io();
+
+        function create(name){
+            console.log(name);
+            socket.emit('createRoom',name, callback =>{
+                console.log(callback.name);
+                /*let gameList = document.getElementById("player-list");
+                let playerList = document.createElement('div');
+                playerList.id = "player 1";
+                playerList.appendChild(document.createTextNode("1. "+ callback.name));
+                gameList.appendChild(playerList);*/
+            });
+            loadRoom();
+        }
+
+        document.body.onload = roomsList;
+        function roomsList(){
+            let list = document.getElementById("rooms-list");
+            socket.emit('getRoomNames',(roomNames) => {
+                roomNames.names.forEach((room) => {
+                    if (room.start === false) {
+                        let entry = document.createElement('button');
+                        console.log(room.id);
+                        entry.onclick = () => {
+                            join(room.id, document.getElementById("name").value);
+                        };
+                        entry.appendChild(document.createTextNode(room.lobbyNames));
+                        list.appendChild(entry);
+                    }
+
+                })
+            });
+        }
+
+        function showList(){
+            document.getElementById("rooms").style.display = "block";
+        }
+
+        function join(roomID, name){
+            socket.emit("joinRoom",roomID, name, joined => {
+                if(joined.join === true){
+                    loadRoom();
+                }
+            });
+        }
+
+        function loadRoom(){
+            document.getElementById("home").style.display = "none";
+            document.getElementById("game").style.display = "block";
+            animate();
+        }
+
+        function loadHome(){
+            document.getElementById("game").style.display = "none";
+            document.getElementById("home").style.display = "block";
+        }
+
+        function leave(){
+            socket.emit("leaveRoom");
+        }
+
+/*        socket.on('newPlayer', (p) =>{
+            console.log(p.id + ": " + socket.id);
+            if(p.id !== socket.id){
+                let gameList = document.getElementById("player-list");
+                let playerList = document.createElement('div');
+                playerList.id = "player " + p.order;
+                playerList.appendChild(document.createTextNode(p.order + ". " + p.name));
+                gameList.appendChild(playerList);
+            }
+        });*/
+    </script>
+    <div id="home" style="display:block">
+        <div id = "logo">
+            <a href="/">
+                <img src="./assets/logo-placeholder.png" alt="">
+            </a>
+        </div>
+        <div id = "panels">
+            <div id = "middle-panel">
+                <div id = "input">
+                    <input id = "name" class="input-name" type="text" spellcheck="false" autocomplete="off" maxlength="10" placeholder="Enter your name" pattern="[a-zA-Z0-9!@#$%^*_|]">
+                </div>
+                <button class="button-play" onclick = "showList()">
+                    <span data-translate="text">Play!</span>
+                </button>
+                <div id="rooms" style="display:none">
+                    <nav>
+                        <ul id="rooms-list" class="rooms-list">
+
+                        </ul>
+                    </nav>
+                </div>
+                <button class="create-room" onclick = "create(document.getElementById('name').value);" >
+                    <span data-translate="text">Create Room!</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="game" style="display:none">
+        <div id="timer"></div>
+        <div id="gameplay"></div>
+        <canvas id = "canvas"></canvas>
+        <script src = "./classes/Player.js"></script>
+        <script src = "./classes/Action.js"></script>
+        <script src = "./classes/Weapon.js"></script>
+        <script src = "./classes/Block.js"></script>
+        <script src = "./classes/Reflecting.js"></script>
+        <script src = "./classes/Charge.js"></script>
+        <script src="./frontend.js"></script>
+    </div>
+    <!--<div id="waiting-room" style="display:none">
+        <div id="game-bar">
+            <div id="exit-button" class="green-button">
+                <button onclick = "loadHome();leave();">
+                    <span data-translate="text">EXIT</span>
+                </button>
+            </div>
+            <div id="room-name">
+
+            </div>
+            <div id="ready-button" class="green-button">
+                <button>
+                    <span data-translate="text">READY</span>
+                </button>
+            </div>
+        </div>
+        <div id="game-players">
+            <div class="player-list" id="player-list">
+
+            </div>
+        </div>-->
+        <!-- <div id = "room" class = "room">
+
+            <div class = "items">
+                <div class = "item">
+                    <div class = "key">
+                        <span data-translate="text">Players</span>
+                    </div>
+                    <div class="value">
+                        <select id = "select-players" data-setting = "1">
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                        </select>
+                    </div>
+                </div>
+                <div class = "item">
+                    <div class = "key">
+                        <span data-translate="text">Round Time</span>
+                    </div>
+                    <div class="value">
+                        <select id = "select-time" data-setting = "1">
+                            <option>5 seconds</option>
+                            <option>6 seconds</option>
+                            <option>7 seconds</option>
+                            <option>8 seconds</option>
+                            <option>9 seconds</option>
+                            <option>10 seconds</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</body>
+</html>
