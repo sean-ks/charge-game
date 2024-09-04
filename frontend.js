@@ -290,6 +290,7 @@ socket.on('game update', (players, output) => {
     /*document.querySelector('#gameplay').innerHTML = output;*/
     let delay = 50;
     let elem = $("#gameplay");
+    elem.css({top: (27/100)*canvas.height, left: (53/100)*canvas.width, position: 'absolute'});
     elem.css('color','black');
     const addTextByDelay = function(text, elem, delay, win){
         if(!elem){

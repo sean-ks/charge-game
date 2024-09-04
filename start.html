@@ -14,7 +14,7 @@
         const socket = io();
 
         function create(name){
-            console.log(name);
+            name = name.replaceAll("/","");
             socket.emit('createRoom',name, callback =>{
                 console.log(callback.name);
                 /*let gameList = document.getElementById("player-list");
@@ -50,6 +50,7 @@
         }
 
         function join(roomID, name){
+            name = name.replaceAll("/","");
             socket.emit("joinRoom",roomID, name, joined => {
                 if(joined.join === true){
                     loadRoom();
@@ -70,7 +71,14 @@
 
         function leave(){
             socket.emit("leaveRoom");
-        }
+        } $(function() {
+            $('#input1').on('keypress', function(e) {
+                if (e.which == 32){
+                    console.log('Space Detected');
+                    return false;
+                }
+            });
+        });
 
 /*        socket.on('newPlayer', (p) =>{
             console.log(p.id + ": " + socket.id);
@@ -92,7 +100,7 @@
         <div id = "panels">
             <div id = "middle-panel">
                 <div id = "input">
-                    <input id = "name" class="input-name" type="text" spellcheck="false" autocomplete="off" maxlength="10" placeholder="Enter your name" pattern="[a-zA-Z0-9!@#$%^*_|]">
+                    <input title = "char" id = "name" class="input-name" type="text" spellcheck="false" autocomplete="off" maxlength="10" placeholder="Enter your name">
                 </div>
                 <button class="button-play" onclick = "showList()">
                     <span data-translate="text">Play!</span>

@@ -102,7 +102,7 @@ function game(players){
                 }
                 //if the target played any block moves
                 else if (backEndPlayers[victimID].block > 0) {
-                    backEndPlayers[victimID].health = Math.max(0,backEndPlayers[victimID].health - Math.max(0, backEndPlayers[id].action.damage - backEndPlayers[victimID].action.block));
+                    backEndPlayers[victimID].health = Math.max(0, backEndPlayers[victimID].health - Math.max(0, backEndPlayers[id].action.damage - backEndPlayers[victimID].block));
                     backEndPlayers[victimID].block = Math.max(0, backEndPlayers[victimID].block - backEndPlayers[id].action.damage);
 
                     gameplayString += backEndPlayers[id].name + " attacks " + backEndPlayers[victimID].name + "with a " + backEndPlayers[id].action.type + ", but it's blocked!/" +
