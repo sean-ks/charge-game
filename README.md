@@ -10,5 +10,5 @@ Charge is a turn-based filipino hand game from the 2000s. Each turn, players get
     3c. Block - requires 0 charges, blocks against projectiles
 After the turn, if there's at least two players still alive, the game continues until there's one person left (the winner) or no one's left alive (draw)
 
-##Play here
+## Play here
 [https://charge-4c00c110298e.herokuapp.com/] (Website still needs debugging)
