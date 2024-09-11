@@ -17,11 +17,6 @@
             name = name.replaceAll("/","");
             socket.emit('createRoom',name, callback =>{
                 console.log(callback.name);
-                /*let gameList = document.getElementById("player-list");
-                let playerList = document.createElement('div');
-                playerList.id = "player 1";
-                playerList.appendChild(document.createTextNode("1. "+ callback.name));
-                gameList.appendChild(playerList);*/
             });
             loadRoom();
         }
@@ -55,6 +50,9 @@
                 if(joined.join === true){
                     loadRoom();
                 }
+                else{
+                    alert("can't join room, max players reached");
+                }
             });
         }
 
@@ -64,21 +62,6 @@
             animate();
         }
 
-        function loadHome(){
-            document.getElementById("game").style.display = "none";
-            document.getElementById("home").style.display = "block";
-        }
-
-        function leave(){
-            socket.emit("leaveRoom");
-        } $(function() {
-            $('#input1').on('keypress', function(e) {
-                if (e.which == 32){
-                    console.log('Space Detected');
-                    return false;
-                }
-            });
-        });
 
 /*        socket.on('newPlayer', (p) =>{
             console.log(p.id + ": " + socket.id);
@@ -129,64 +112,5 @@
         <script src = "./classes/Reflecting.js"></script>
         <script src = "./classes/Charge.js"></script>
         <script src="./frontend.js"></script>
-    </div>
-    <!--<div id="waiting-room" style="display:none">
-        <div id="game-bar">
-            <div id="exit-button" class="green-button">
-                <button onclick = "loadHome();leave();">
-                    <span data-translate="text">EXIT</span>
-                </button>
-            </div>
-            <div id="room-name">
-
-            </div>
-            <div id="ready-button" class="green-button">
-                <button>
-                    <span data-translate="text">READY</span>
-                </button>
-            </div>
-        </div>
-        <div id="game-players">
-            <div class="player-list" id="player-list">
-
-            </div>
-        </div>-->
-        <!-- <div id = "room" class = "room">
-
-            <div class = "items">
-                <div class = "item">
-                    <div class = "key">
-                        <span data-translate="text">Players</span>
-                    </div>
-                    <div class="value">
-                        <select id = "select-players" data-setting = "1">
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                        </select>
-                    </div>
-                </div>
-                <div class = "item">
-                    <div class = "key">
-                        <span data-translate="text">Round Time</span>
-                    </div>
-                    <div class="value">
-                        <select id = "select-time" data-setting = "1">
-                            <option>5 seconds</option>
-                            <option>6 seconds</option>
-                            <option>7 seconds</option>
-                            <option>8 seconds</option>
-                            <option>9 seconds</option>
-                            <option>10 seconds</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-    </div>
 </body>
 </html>

@@ -21,6 +21,19 @@ const charge = new Charge('Charge', 0);
 //clickable elements on the canvas, which includes the buttons for weapons, shields, and charges.
 let elements = [];
 
+let assets = {
+    Weapon: './assets/weapon_gray.png',
+    Knife: './assets/sak.png',
+    Bang: './assets/bang.png',
+    Shield: './assets/shield_gray.jpg',
+    Block: './assets/block.jpg',
+    Reflect: './assets/reflect.png',
+    Counter: './assets/counter.png',
+    Charge: './assets/charge_gray.png',
+    Start: './assets/start.png',
+    Ready: './assets/ready.webp'
+};
+
 let frontEndPlayers = {};
 
 //receives the updated players list from the backend
@@ -76,7 +89,8 @@ socket.on('updatePlayers', (backendPlayers) => {
                             console.log(socket.id + ' targeted ' + this.id);
                         }
                     }
-                }
+                },
+
             });
             //Clickable actions
             if(socket.id === id){
@@ -88,7 +102,7 @@ socket.on('updatePlayers', (backendPlayers) => {
                     top: 200,
                     left: 0,
                     player: false,
-                    img: './assets/weapon.webp',
+                    img: './assets/weapon_gray.png',
                     active: false,
                     //This function creates a drop down menu for the weapon button; a menu of more weapons like knives and pistols
                     function(){
@@ -101,28 +115,31 @@ socket.on('updatePlayers', (backendPlayers) => {
                             id: 'Knife',
                             colour: 'rgba(255, 255, 0, 1)',
                             width: canvas.width/12,
-                            height: canvas.width/12,
+                            height: canvas.width/8,
                             top: 200+canvas.width/12,
                             left: 0,
                             player: false,
                             active: true,
-                            img: './assets/knife.webp',
+                            img: './assets/sak.png',
                             //This function changes the client's action to the knife
                             function(){
                                 frontEndPlayers[socket.id].target = [];
                                 frontEndPlayers[socket.id].action = knife;
                                 console.log(socket.id + ' chose knife');
+                            },
+                            hover(){
+                                //do nothing for now
                             }
                         },{
                             id: 'Bang',
                             colour: 'rgba(255, 255, 0, 1)',
                             width: canvas.width/12,
-                            height: canvas.width/12,
+                            height: canvas.width/8,
                             top: 200+canvas.width/12,
                             left: canvas.width/12,
                             player: false,
                             active: true,
-                            img: './assets/bang.jpg',
+                            img: './assets/bang.png',
                             //This function changes the client's action to the bang
                             function(){
                                 frontEndPlayers[socket.id].target = [];
@@ -133,8 +150,14 @@ socket.on('updatePlayers', (backendPlayers) => {
                                     console.log('not enough charges');
                                 }
 
+                            },
+                            hover(){
+                                //do nothing for now
                             }
                         })
+                    },
+                    hover(){
+                        this.img = './assets/weapon.webp';
                     }
                 },{
                     id: 'Shield',
@@ -145,7 +168,7 @@ socket.on('updatePlayers', (backendPlayers) => {
                     left: canvas.width/12,
                     player: false,
                     active: false,
-                    img: './assets/shield.jpg',
+                    img: './assets/shield_gray.jpg',
                     //this function creates a dropdown menu for reflect, shield, and counter
                     function() {
                         frontEndPlayers[socket.id].target = [];
@@ -165,20 +188,26 @@ socket.on('updatePlayers', (backendPlayers) => {
                             function(){
                                 frontEndPlayers[socket.id].action = block;
                                 console.log(socket.id + ' chose block');
+                            },
+                            hover(){
+                                //do nothing for now
                             }
                         },{
                             id: 'Reflect',
                             colour: 'rgba(255, 255, 0, 1)',
                             width: canvas.width/12,
-                            height: canvas.width/12,
+                            height: canvas.width/8,
                             top: 200+canvas.width/12,
                             left: canvas.width/12,
                             player: false,
                             active: true,
-                            img: './assets/reflect.webp',
+                            img: './assets/reflect.png',
                             function(){
                                 frontEndPlayers[socket.id].action = reflection;
                                 console.log(socket.id + ' chose reflect');
+                            },
+                            hover(){
+                                //do nothing for now
                             }
                         },{
                             id: 'Counter',
@@ -193,8 +222,14 @@ socket.on('updatePlayers', (backendPlayers) => {
                             function(){
                                 frontEndPlayers[socket.id].action = counter;
                                 console.log(socket.id + ' chose counter');
+                            },
+                            hover(){
+                                //do nothing for now
                             }
                         })
+                    },
+                    hover() {
+                        this.img = './assets/shield.jpg';
                     }
                 },{
                     id: 'Charge',
@@ -205,7 +240,7 @@ socket.on('updatePlayers', (backendPlayers) => {
                     left: canvas.width/6,
                     player: false,
                     active: false,
-                    img: './assets/charge.webp',
+                    img: './assets/charge_gray.png',
                     function(){
                         frontEndPlayers[socket.id].target = [];
                         elements.forEach(function(elem){
@@ -213,6 +248,9 @@ socket.on('updatePlayers', (backendPlayers) => {
                         })
                         frontEndPlayers[socket.id].action = charge;
                         console.log(socket.id + ' chose charge');
+                    },
+                    hover(){
+                        this.img = './assets/charge.webp';
                     }
                 });
             }
@@ -241,6 +279,9 @@ socket.on('updatePlayers', (backendPlayers) => {
                         else{
                             alert('not enough players');
                         }
+                    },
+                    hover(){
+                        //doesn't need a hover, but it needs hover function or it throws an error
                     }
 
                 })
@@ -350,6 +391,9 @@ socket.on('game update', (players, output) => {
                     function() {
                         socket.emit('ready');
                     },
+                    hover(){
+                        //do nothing for now
+                    }
 
                 })
             }
@@ -378,7 +422,7 @@ socket.on('game update', (players, output) => {
 
 socket.on('round start', () =>{
     elements = elements.filter(elem => elem.id !== "Ready");
-    let delay = 1000;
+    let delay = 500;
     let elem = $("#gameplay");
     elem.css("color", "black");
     let text = "3/2/1/"
@@ -388,7 +432,7 @@ socket.on('round start', () =>{
             elem = $("#game");
         }
         if(!delay){
-            delay = 1000;
+            delay = 500;
         }
         if(text.length > 0){
             if(text[0] === "/"){
@@ -549,23 +593,18 @@ function animate(){
 
                     const heartImg = new Image();
                     heartImg.src = determineHeart(player.health);
-                    ctx.drawImage(heartImg,70,50,100,100);
-                    ctx.drawImage(chargeImg,250,25,100,150);
+                    ctx.drawImage(heartImg,(70/1920)*canvas.width,(50/955)*canvas.height,80,80);//70,50,100,100
+                    ctx.drawImage(chargeImg,(250/1920)*canvas.width,(25/955)*canvas.height,(100/1920)*canvas.width,(150/955)*canvas.height);//250,25,100,150
 
                     ctx.fillStyle='rgba(247, 208, 39, 1)';
-                    ctx.font = '30px Impact';
-                    ctx.fillText('x', 350, 40);
-                    ctx.font = '60px Impact';
-                    ctx.fillText(player.charges, 370,60)
+                    ctx.font = '25px Impact';
+                    ctx.fillText('x', (350/1920)*canvas.width, (40/955)*canvas.height);
+                    ctx.font = '50px Impact';
+                    ctx.fillText(player.charges, (370/1920)*canvas.width,(60/955)*canvas.height);
                 }
             }
             else {
-                if(order > 8){
-                    //code for the people in the game
-                    ctx.font = '20px verdana';
-                    ctx.fillText('There is/are ' + (order - 8) + ' spectator/s', 500, 50);//this has to be an html thing, not a canvas thing
-                }
-                else if(order === 1){
+                if(order === 1){
                     let switchX = determinePosition(frontEndPlayers[socket.id].order,'x');
                     let switchY = determinePosition(frontEndPlayers[socket.id].order,'y');
                     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
@@ -585,7 +624,7 @@ function animate(){
                     element.left = switchX;
                     element.top = switchY;
                 }
-                else {
+                else if (order < 9){
                     element.left = determinePosition(player.order,'x');
                     element.top = determinePosition(player.order,'y');
 
@@ -618,6 +657,8 @@ function animate(){
         }
     });
 
+
+
 }
 //this checks for the clicks in the game, if an element is clicked, call a function
 canvas.addEventListener('click', function() {
@@ -635,7 +676,24 @@ canvas.addEventListener('click', function() {
     });
 }, false);
 
-// send message function
+canvas.addEventListener("mousemove", function(){
+    let x = event.pageX - (canvas.offsetLeft + canvas.clientLeft);
+    let y = event.pageY - (canvas.offsetTop + canvas.clientTop);
+    elements.forEach(function(element){
+        if(y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width){
+            console.log("mouseover");
+            if(element.player === false){
+                element.hover();
+            }
+        }
+        else {
+            if(element.player === false){
+                element.img = assets[element.id]
+            }
+        }
+    })
+});
+
 function sendMessage(e){
     e.preventDefault()
     const input = document.querySelector('input')

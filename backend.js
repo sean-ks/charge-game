@@ -134,6 +134,14 @@ function game(players){
             });
         }
     }
+
+    //restart block and reflect
+    for(const id in players){
+        backEndPlayers[id].block = 0;
+        backEndPlayers[id].reflect = 0;
+        backEndPlayers[id].target = [];
+    }
+
     return gameplayString;
 }
 
